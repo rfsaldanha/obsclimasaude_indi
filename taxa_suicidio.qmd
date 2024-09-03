@@ -68,7 +68,8 @@ res_year_db <- res_year |>
         tema = substr(codind, 0, 2),
         codprin = substr(codind, 0, 6)
     ) |>
-    select(codmun, codind, valor, uf, tema, anos, codprin)
+    select(codmun, codind, valor, uf, tema, anos, codprin) |>
+    filter(substr(codmun, 3, 6) != "0000")
 ```
 
 ```{r}
@@ -87,7 +88,8 @@ res_month_db <- res_month |>
         codprin = substr(codind, 0, 6),
         anos = substr(anos, 0, 4)
     ) |>
-    select(codmun, codind, valor, uf, tema, anos, codprin)
+    select(codmun, codind, valor, uf, tema, anos, codprin) |>
+    filter(substr(codmun, 3, 6) != "0000")
 ```
 
 ```{r}
