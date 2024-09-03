@@ -1,0 +1,116 @@
+---
+title: "Taxa de mortalidade por suicídio"
+author: "Raphael Saldanha"
+date: now
+format: 
+    html:
+        embed-resources: false
+project:
+  output-dir: docs
+---
+
+Notebook do cálculo da taxa **bruta** de mortalidade por suicídio por 100.000 habitantes, considerando os CIDs X60 a X84 e X87, para os municípios brasileiros segundo local de residência, entre os anos de 2001 a 2021.
+
+## Pacotes
+
+```{r}
+#| message: false
+library(tidyverse)
+library(brindi)
+```
+
+## Parâmetros de cálculo
+
+```{r}
+anos <- 2001:2021
+```
+
+## Indicador anual por municípios
+
+```{r}
+res_year <- expand_indi(
+    agg = "mun_res", 
+    agg_time = "year", 
+    anos = anos, 
+    indi_fun = "indi_0005"
+)
+```
+
+```{r}
+tail(res_year)
+```
+
+## Indicador mensal por municípios
+
+```{r}
+res_month <- expand_indi(
+    agg = "mun_res", 
+    agg_time = "month", 
+    anos = anos, 
+    indi_fun = "indi_0005"
+)
+```
+
+```{r}
+tail(res_month)
+```
+
+## Estrutura para banco de dados
+
+### Dados anuais
+
+```{r}
+res_year_db <- res_year |>
+    mutate(name = paste0("ee0132", substr(date, 3,4), "00")) |>
+    pivot_wider(
+        id_cols = cod, 
+        names_from = name, 
+        values_from = value
+    )
+```
+
+```{r}
+head(res_year_db)
+```
+
+### Dados mensais
+
+```{r}
+res_month_db <- res_month |>
+    mutate(name = paste0("ee0132", substr(date, 3,4), substr(date, 6,7))) |>
+    pivot_wider(
+        id_cols = cod, 
+        names_from = name, 
+        values_from = value
+    )
+```
+
+```{r}
+head(res_month_db)
+```
+
+### Junta dados anuais e mensais
+
+```{r}
+res_db <- full_join(res_year_db, res_month_db, by = "cod")
+```
+
+```{r}
+head(res_db)
+```
+
+## Exporta dados 
+
+Arquivo CSV separado por ponto-e-vírgula (;) em codificação UTF-8, comprimido em formato Zip.
+
+```{r}
+write_csv2(x = res_db, file = "indi0005_db.csv")
+zip(zipfile = "indi0005_db.csv.zip", files = "indi0005_db.csv")
+unlink("indi0005_db.csv")
+```
+
+## Informações da seção
+
+```{r}
+sessioninfo::session_info()
+```
