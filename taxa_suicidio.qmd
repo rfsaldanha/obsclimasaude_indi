@@ -61,42 +61,47 @@ tail(res_month)
 
 ```{r}
 res_year_db <- res_year |>
-    mutate(name = paste0("ee0132", substr(date, 3,4), "00")) |>
-    pivot_wider(
-        id_cols = cod, 
-        names_from = name, 
-        values_from = value
-    )
+    mutate(codind = paste0("ee0132", substr(date, 3,4), "00")) |>
+    rename(codmun = cod, valor = value, anos = date) |>
+    mutate(
+        uf = substr(codmun, 0, 2),
+        tema = substr(codind, 0, 2),
+        codprin = substr(codind, 0, 6)
+    ) |>
+    select(codmun, codind, valor, uf, tema, anos, codprin)
 ```
 
 ```{r}
-head(res_year_db)
+tail(res_year_db)
 ```
 
 ### Dados mensais
 
 ```{r}
 res_month_db <- res_month |>
-    mutate(name = paste0("ee0132", substr(date, 3,4), substr(date, 6,7))) |>
-    pivot_wider(
-        id_cols = cod, 
-        names_from = name, 
-        values_from = value
-    )
+    mutate(codind = paste0("ee0132", substr(date, 3,4), substr(date, 6,7))) |>
+    rename(codmun = cod, valor = value, anos = date) |>
+    mutate(
+        uf = substr(codmun, 0, 2),
+        tema = substr(codind, 0, 2),
+        codprin = substr(codind, 0, 6),
+        anos = substr(anos, 0, 4)
+    ) |>
+    select(codmun, codind, valor, uf, tema, anos, codprin)
 ```
 
 ```{r}
-head(res_month_db)
+tail(res_month_db)
 ```
 
 ### Junta dados anuais e mensais
 
 ```{r}
-res_db <- full_join(res_year_db, res_month_db, by = "cod")
+res_db <- bind_rows(res_year_db, res_month_db)
 ```
 
 ```{r}
-head(res_db)
+tail(res_db)
 ```
 
 ## Exporta dados 

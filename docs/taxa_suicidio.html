@@ -180,29 +180,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="dados-anuais">Dados anuais</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>res_year_db <span class="ot">&lt;-</span> res_year <span class="sc">|&gt;</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">paste0</span>(<span class="st">"ee0132"</span>, <span class="fu">substr</span>(date, <span class="dv">3</span>,<span class="dv">4</span>), <span class="st">"00"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_wider</span>(</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">id_cols =</span> cod, </span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">names_from =</span> name, </span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">values_from =</span> value</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">codind =</span> <span class="fu">paste0</span>(<span class="st">"ee0132"</span>, <span class="fu">substr</span>(date, <span class="dv">3</span>,<span class="dv">4</span>), <span class="st">"00"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">codmun =</span> cod, <span class="at">valor =</span> value, <span class="at">anos =</span> date) <span class="sc">|&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">uf =</span> <span class="fu">substr</span>(codmun, <span class="dv">0</span>, <span class="dv">2</span>),</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">tema =</span> <span class="fu">substr</span>(codind, <span class="dv">0</span>, <span class="dv">2</span>),</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">codprin =</span> <span class="fu">substr</span>(codind, <span class="dv">0</span>, <span class="dv">6</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(codmun, codind, valor, uf, tema, anos, codprin)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(res_year_db)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(res_year_db)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 22
-     cod ee01320100 ee01320200 ee01320300 ee01320400 ee01320500 ee01320600
-   &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
-1 110000      NA          0          0          0          0          0   
-2 110001      14.9        7.52       7.59       0          3.86       7.78
-3 110002       6.4        1.25       2.45       2.4        3.52       2.31
-4 110003       0          0          0         14.0        0          0   
-5 110004       9.24       9.16       1.3        5.16       2.56       3.82
-6 110005       5.42       0          0          0          0          5.61
-# ℹ 15 more variables: ee01320700 &lt;dbl&gt;, ee01320800 &lt;dbl&gt;, ee01320900 &lt;dbl&gt;,
-#   ee01321000 &lt;dbl&gt;, ee01321100 &lt;dbl&gt;, ee01321200 &lt;dbl&gt;, ee01321300 &lt;dbl&gt;,
-#   ee01321400 &lt;dbl&gt;, ee01321500 &lt;dbl&gt;, ee01321600 &lt;dbl&gt;, ee01321700 &lt;dbl&gt;,
-#   ee01321800 &lt;dbl&gt;, ee01321900 &lt;dbl&gt;, ee01322000 &lt;dbl&gt;, ee01322100 &lt;dbl&gt;</code></pre>
+<pre><code># A tibble: 6 × 7
+  codmun codind     valor uf    tema  anos  codprin
+   &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  
+1 530010 ee01321600  5.25 53    ee    2016  ee0132 
+2 530010 ee01321700  5.73 53    ee    2017  ee0132 
+3 530010 ee01321800  6.29 53    ee    2018  ee0132 
+4 530010 ee01321900  6.6  53    ee    2019  ee0132 
+5 530010 ee01322000  6.48 53    ee    2020  ee0132 
+6 530010 ee01322100  6.14 53    ee    2021  ee0132 </code></pre>
 </div>
 </div>
 </section>
@@ -210,59 +208,48 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="dados-mensais">Dados mensais</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>res_month_db <span class="ot">&lt;-</span> res_month <span class="sc">|&gt;</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">paste0</span>(<span class="st">"ee0132"</span>, <span class="fu">substr</span>(date, <span class="dv">3</span>,<span class="dv">4</span>), <span class="fu">substr</span>(date, <span class="dv">6</span>,<span class="dv">7</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_wider</span>(</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">id_cols =</span> cod, </span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">names_from =</span> name, </span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">values_from =</span> value</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">codind =</span> <span class="fu">paste0</span>(<span class="st">"ee0132"</span>, <span class="fu">substr</span>(date, <span class="dv">3</span>,<span class="dv">4</span>), <span class="fu">substr</span>(date, <span class="dv">6</span>,<span class="dv">7</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">codmun =</span> cod, <span class="at">valor =</span> value, <span class="at">anos =</span> date) <span class="sc">|&gt;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">uf =</span> <span class="fu">substr</span>(codmun, <span class="dv">0</span>, <span class="dv">2</span>),</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">tema =</span> <span class="fu">substr</span>(codind, <span class="dv">0</span>, <span class="dv">2</span>),</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">codprin =</span> <span class="fu">substr</span>(codind, <span class="dv">0</span>, <span class="dv">6</span>),</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">anos =</span> <span class="fu">substr</span>(anos, <span class="dv">0</span>, <span class="dv">4</span>)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(codmun, codind, valor, uf, tema, anos, codprin)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(res_month_db)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(res_month_db)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 253
-     cod ee01320101 ee01320102 ee01320103 ee01320104 ee01320105 ee01320106
-   &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
-1 110000       0             0       0             0       0          0   
-2 110001       0             0       0             0       0          3.73
-3 110002       0             0       1.28          0       3.84       0   
-4 110003       0             0       0             0       0          0   
-5 110004       2.64          0       1.32          0       0          1.32
-6 110005       5.42          0       0             0       0          0   
-# ℹ 246 more variables: ee01320107 &lt;dbl&gt;, ee01320108 &lt;dbl&gt;, ee01320109 &lt;dbl&gt;,
-#   ee01320110 &lt;dbl&gt;, ee01320111 &lt;dbl&gt;, ee01320112 &lt;dbl&gt;, ee01320201 &lt;dbl&gt;,
-#   ee01320202 &lt;dbl&gt;, ee01320203 &lt;dbl&gt;, ee01320204 &lt;dbl&gt;, ee01320205 &lt;dbl&gt;,
-#   ee01320206 &lt;dbl&gt;, ee01320207 &lt;dbl&gt;, ee01320208 &lt;dbl&gt;, ee01320209 &lt;dbl&gt;,
-#   ee01320210 &lt;dbl&gt;, ee01320211 &lt;dbl&gt;, ee01320212 &lt;dbl&gt;, ee01320301 &lt;dbl&gt;,
-#   ee01320302 &lt;dbl&gt;, ee01320303 &lt;dbl&gt;, ee01320304 &lt;dbl&gt;, ee01320305 &lt;dbl&gt;,
-#   ee01320306 &lt;dbl&gt;, ee01320307 &lt;dbl&gt;, ee01320308 &lt;dbl&gt;, ee01320309 &lt;dbl&gt;, …</code></pre>
+<pre><code># A tibble: 6 × 7
+  codmun codind     valor uf    tema  anos  codprin
+   &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  
+1 530010 ee01322107  0.48 53    ee    2021  ee0132 
+2 530010 ee01322108  0.39 53    ee    2021  ee0132 
+3 530010 ee01322109  0.52 53    ee    2021  ee0132 
+4 530010 ee01322110  0.45 53    ee    2021  ee0132 
+5 530010 ee01322111  0.78 53    ee    2021  ee0132 
+6 530010 ee01322112  0.45 53    ee    2021  ee0132 </code></pre>
 </div>
 </div>
 </section>
 <section id="junta-dados-anuais-e-mensais" class="level3">
 <h3 class="anchored" data-anchor-id="junta-dados-anuais-e-mensais">Junta dados anuais e mensais</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>res_db <span class="ot">&lt;-</span> <span class="fu">full_join</span>(res_year_db, res_month_db, <span class="at">by =</span> <span class="st">"cod"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>res_db <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(res_year_db, res_month_db)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(res_db)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(res_db)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 274
-     cod ee01320100 ee01320200 ee01320300 ee01320400 ee01320500 ee01320600
-   &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
-1 110000      NA          0          0          0          0          0   
-2 110001      14.9        7.52       7.59       0          3.86       7.78
-3 110002       6.4        1.25       2.45       2.4        3.52       2.31
-4 110003       0          0          0         14.0        0          0   
-5 110004       9.24       9.16       1.3        5.16       2.56       3.82
-6 110005       5.42       0          0          0          0          5.61
-# ℹ 267 more variables: ee01320700 &lt;dbl&gt;, ee01320800 &lt;dbl&gt;, ee01320900 &lt;dbl&gt;,
-#   ee01321000 &lt;dbl&gt;, ee01321100 &lt;dbl&gt;, ee01321200 &lt;dbl&gt;, ee01321300 &lt;dbl&gt;,
-#   ee01321400 &lt;dbl&gt;, ee01321500 &lt;dbl&gt;, ee01321600 &lt;dbl&gt;, ee01321700 &lt;dbl&gt;,
-#   ee01321800 &lt;dbl&gt;, ee01321900 &lt;dbl&gt;, ee01322000 &lt;dbl&gt;, ee01322100 &lt;dbl&gt;,
-#   ee01320101 &lt;dbl&gt;, ee01320102 &lt;dbl&gt;, ee01320103 &lt;dbl&gt;, ee01320104 &lt;dbl&gt;,
-#   ee01320105 &lt;dbl&gt;, ee01320106 &lt;dbl&gt;, ee01320107 &lt;dbl&gt;, ee01320108 &lt;dbl&gt;,
-#   ee01320109 &lt;dbl&gt;, ee01320110 &lt;dbl&gt;, ee01320111 &lt;dbl&gt;, ee01320112 &lt;dbl&gt;, …</code></pre>
+<pre><code># A tibble: 6 × 7
+  codmun codind     valor uf    tema  anos  codprin
+   &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  
+1 530010 ee01322107  0.48 53    ee    2021  ee0132 
+2 530010 ee01322108  0.39 53    ee    2021  ee0132 
+3 530010 ee01322109  0.52 53    ee    2021  ee0132 
+4 530010 ee01322110  0.45 53    ee    2021  ee0132 
+5 530010 ee01322111  0.78 53    ee    2021  ee0132 
+6 530010 ee01322112  0.45 53    ee    2021  ee0132 </code></pre>
 </div>
 </div>
 </section>
